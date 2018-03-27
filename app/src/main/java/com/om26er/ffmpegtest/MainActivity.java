@@ -1,5 +1,6 @@
 package com.om26er.ffmpegtest;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ffmpeg = FFmpeg.getInstance(getApplicationContext());
         loadFFMpegBinary();
-        execFFmpegBinary(new String[]{"ffmpeg", "-h"});
+        String dir = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String file = dir + "/output.mp4";
+        String command = String.format("ffmpeg -ss 00:01:15 -t 00:00:30 -i http://192.168.1.4:8000/video.MP4 -c copy %s", file);
+        execFFmpegBinary(command.split(" "));
     }
 
     private void loadFFMpegBinary() {
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(String s) {
                     System.out.println("My name is OK");
+                    System.out.println(s);
                 }
 
                 @Override
